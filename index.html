@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vortex Recon v6.0 — Browser-Context Attack Surface & Cloud Auditor</title>
+  <style>
+    :root {
+      --bg: #06080d;
+      --surface: #0d1117;
+      --surface-2: #161b22;
+      --border: #262c36;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #388bfd;
+      --accent-glow: rgba(56, 139, 253, 0.28);
+      --green: #2ea043;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 139, 253, 0.14), transparent 55%),
+        linear-gradient(to bottom, transparent, var(--bg));
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container { max-width: 1060px; margin: 0 auto; padding: 48px 24px 80px; }
+    .nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 40px; border-bottom: 1px solid var(--border); margin-bottom: 56px;
+    }
+    .brand { font-family: var(--mono); font-weight: 700; font-size: 18px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+    .badge {
+      font-family: var(--mono); font-size: 11px; padding: 3px 8px;
+      border-radius: 999px; background: rgba(56, 139, 253, 0.15);
+      color: var(--accent); border: 1px solid rgba(56, 139, 253, 0.4);
+    }
+    .hero { text-align: center; max-width: 780px; margin: 0 auto 56px; }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px); font-weight: 800;
+      letter-spacing: -1.2px; line-height: 1.15; margin-bottom: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #9ca3af 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--muted); font-size: 18px; margin-bottom: 36px; }
+    .install-dock {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px; margin-bottom: 56px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .cta-row {
+      display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: center; margin-bottom: 20px;
+    }
+    .bm-drag {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, #1f6feb, #388bfd);
+      color: #fff; text-decoration: none; font-family: var(--mono);
+      font-weight: 700; font-size: 15px; padding: 14px 28px;
+      border-radius: 10px; border: 1px solid #58a6ff;
+      box-shadow: 0 0 28px var(--accent-glow);
+      cursor: grab; transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .bm-drag:hover { transform: translateY(-2px); box-shadow: 0 0 38px rgba(56, 139, 253, 0.5); }
+    .btn-copy {
+      background: var(--surface-2); color: var(--text);
+      border: 1px solid var(--border); font-family: var(--mono);
+      font-weight: 600; font-size: 14px; padding: 14px 24px;
+      border-radius: 10px; cursor: pointer; transition: all 0.15s ease;
+    }
+    .btn-copy:hover { border-color: var(--accent); background: #1c222b; }
+    .hint { text-align: center; font-size: 13px; color: var(--muted); font-family: var(--mono); }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px; margin-bottom: 56px;
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px; transition: border-color 0.2s;
+    }
+    .card:hover { border-color: #3b434f; }
+    .card-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: #58a6ff; margin-bottom: 8px; }
+    .card p { font-size: 14px; color: var(--muted); }
+    .code-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+    }
+    .code-hdr {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted);
+    }
+    textarea {
+      width: 100%; height: 130px; background: var(--bg); color: #7ee787;
+      border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+      font-family: var(--mono); font-size: 12px; resize: vertical; outline: none;
+    }
+    footer {
+      text-align: center; color: var(--muted); font-size: 13px;
+      border-top: 1px solid var(--border); padding-top: 32px; margin-top: 48px;
+      font-family: var(--mono);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">⚡ VORTEX RECON <span class="badge">v6.0 CLOUD ROOT</span></div>
+      <div style="font-family: var(--mono); font-size: 13px; color: var(--muted);">18 Modules • Zero Dependencies</div>
+    </nav>
+
+    <section class="hero">
+      <h1>Browser-Context Recon &amp; Live Cloud Root Auditor</h1>
+      <p>Extract hidden endpoints, deep-scan production JS bundles, enumerate GraphQL operations, and audit S3/Firebase/GCS/Azure bucket ACLs directly from your active session.</p>
+    </section>
+
+    <section class="install-dock">
+      <div class="cta-row">
+        <a id="bmLink" class="bm-drag" href="#" title="Drag me to your Bookmarks Bar!">⚡ Vortex Recon v6.0</a>
+        <button id="copyBtn" class="btn-copy">📋 Copy Bookmarklet Payload</button>
+      </div>
+      <p class="hint">👆 Drag the blue button to your Bookmarks Bar (Ctrl+Shift+B / Cmd+Shift+B), then click it on any authorized target.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="card-title">[01] Live Cloud Root Probing</div>
+        <p>Automatically normalizes S3, GCS, Azure Blob, Firebase (<code>/.json</code>), Supabase, and R2 URLs and checks for public 200 OK bucket listings.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">[02] Deep JS Bundle AST/Regex</div>
+        <p>Fetches same-origin JS bundles in parallel to extract relative API routes, GraphQL queries/mutations, source maps, and dangerous DOM sinks.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">[03] Session-Aware &amp; WAF Safe</div>
+        <p>Executes inside the native browser tab, inheriting authenticated cookies and bypassing headless browser TLS/JA3 fingerprinting.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">[04] SSRF &amp; Open Redirect Triage</div>
+        <p>Automatically isolates endpoints carrying high-risk redirect and fetch parameters (<code>?url=</code>, <code>?next=</code>, <code>?redirect_uri=</code>, <code>?proxy=</code>).</p>
+      </div>
+      <div class="card">
+        <div class="card-title">[05] Discovery &amp; Config Probing</div>
+        <p>Checks 20+ well-known paths including <code>swagger.json</code>, <code>openid-configuration</code>, <code>security.txt</code>, and exposed cloud configs.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">[06] Instant JSON / Wordlist Export</div>
+        <p>Filter across 18 categorized tabs in real time, toggle relative vs. full URLs, or export structured JSON and fuzzing wordlists in one click.</p>
+      </div>
+    </section>
+
+    <section class="code-box">
+      <div class="code-hdr">
+        <span>RAW BOOKMARKLET PAYLOAD (MANUAL INSTALL)</span>
+        <span id="charCount"></span>
+      </div>
+      <textarea id="rawOutput" readonly></textarea>
+    </section>
+
+    <footer>
+      Built for Authorized Security Assessments, Bug Bounty Reconnaissance &amp; Surface Auditing.
+    </footer>
+  </div>
+
+  <!-- Exact Bookmarklet Source Stored Safely -->
+  <script type="text/plain" id="bm-source">javascript:(async()=>{const w=window.open("","_blank");if(!w){alert("Popup blocked! Please allow popups for this site.");return;}const origin=location.origin,host=location.hostname.replace(/^www\./,"");w.document.title="Scanning "+host+"...";w.document.body.style.cssText="background:#0d1117;color:#c9d1d9;font-family:monospace;padding:24px;margin:0";w.document.body.innerHTML="<h3 style='color:#58a6ff;margin-bottom:8px'>[*] Running Enterprise Recon Suite (v6.0 Auto-Cloud Tester) on "+host+"...</h3><div id='st' style='color:#8b949e;font-size:14px'>Initializing all 18 modules & cloud root testers...</div>";const setSt=m=>{const el=w.document.getElementById("st");if(el)el.textContent=m};const endpoints=new Set(),subdomains=new Set(),externals=new Set(),jsFiles=new Set(),sourceMaps=new Set(),gqlOps=new Set(),wsAndSinks=new Set(),discoveryList=new Set(),headersList=new Set(),paramNames=new Set(),formsList=new Set(),cloudList=new Set(),cloudTestUrls=new Set(),commentsList=new Set();const ignoreExt=[".png",".jpg",".jpeg",".gif",".svg",".webp",".ico",".bmp",".css",".woff",".woff2",".ttf",".eot",".otf",".mp4",".mp3",".wav",".avi",".mov",".webm"];const fileDbExt=[".zip",".rar",".7z",".tar",".gz",".tgz",".bz2",".xz",".db",".sql",".sqlite",".sqlite3",".mdb",".accdb",".dump",".bson",".rdb",".bak",".backup",".old",".orig",".swp",".save",".tmp",".env",".log",".conf",".config",".cfg",".ini",".yml",".yaml",".toml",".csv",".xls",".xlsx",".doc",".docx",".pdf",".txt",".md",".sh",".bash",".bat",".ps1",".py",".rb",".pl",".jar",".war",".ear",".apk",".ipa",".git",".svn",".ds_store",".htaccess",".htpasswd"];const cloudKw=["s3.amazonaws.com",".s3.",".s3-","amazonaws.com","storage.googleapis.com","storage.cloud.google.com","firestore.googleapis.com","blob.core.windows.net","file.core.windows.net","dfs.core.windows.net","queue.core.windows.net","table.core.windows.net","azureedge.net","firebaseio.com","firebasedatabase.app","firebasestorage.googleapis.com","appspot.com","supabase.co","supabase.in","r2.cloudflarestorage.com",".r2.dev","digitaloceanspaces.com","backblazeb2.com","wasabisys.com","aliyuncs.com","linodeobjects.com","vultrobjects.com","workers.dev","pages.dev","herokuapp.com","vercel.app","netlify.app","cloudfront.net"];const ssrfParams=["url","uri","redirect","redirect_uri","redirect_url","return","return_to","returnurl","next","dest","destination","continue","target","link","out","view","to","callback","proxy","file","path","load","fetch","domain","host","site","html","data","reference","ref","page","feed","port","dir","show","navigation","open"];const cleanPath=p=>p.split("?")[0].split("#")[0].toLowerCase();const isIgnored=p=>{const c=cleanPath(p);return ignoreExt.some(ext=>c.endsWith(ext))};const isFileDb=p=>{const c=cleanPath(p);return fileDbExt.some(ext=>c.endsWith(ext))};const isJsPath=p=>cleanPath(p).endsWith(".js");const checkSsrfParam=p=>{if(!p.includes("?"))return false;const qs=p.split("?")[1].toLowerCase();return ssrfParams.some(sp=>qs.startsWith(sp+"=")||qs.includes("&"+sp+"="))};const registerCloudTests=raw=>{try{const low=raw.trim().toLowerCase();if(low.startsWith("s3://")){const b=raw.trim().slice(5).split("/")[0];if(b)cloudTestUrls.add("https://"+b+".s3.amazonaws.com/");return}if(low.startsWith("gs://")){const b=raw.trim().slice(5).split("/")[0];if(b)cloudTestUrls.add("https://storage.googleapis.com/"+b+"/");return}const u=new URL(raw,location.href),h=u.hostname.toLowerCase(),segs=u.pathname.split("/").filter(Boolean);if(h.includes("firebaseio.com")||h.includes("firebasedatabase.app")){cloudTestUrls.add(u.origin+"/.json")}else if(h.includes("firebasestorage.googleapis.com")&&segs.length>=2&&segs[0]==="v0"&&segs[1]==="b"){cloudTestUrls.add(u.origin+"/v0/b/"+segs[2]+"/o")}else if(h.includes(".s3.")||h.includes(".s3-")||h.endsWith(".s3.amazonaws.com")){cloudTestUrls.add(u.origin+"/")}else if((h==="s3.amazonaws.com"||h.startsWith("s3.")||h.startsWith("s3-"))&&h.endsWith("amazonaws.com")&&segs.length>0){cloudTestUrls.add(u.origin+"/"+segs[0]+"/")}else if((h==="storage.googleapis.com"||h==="storage.cloud.google.com")&&segs.length>0){cloudTestUrls.add("https://storage.googleapis.com/"+segs[0]+"/")}else if(h.endsWith(".storage.googleapis.com")){cloudTestUrls.add(u.origin+"/")}else if(h.includes(".blob.core.windows.net")&&segs.length>0){cloudTestUrls.add(u.origin+"/"+segs[0]+"?restype=container&comp=list")}else if(h.includes("supabase.co")||h.includes("supabase.in")){cloudTestUrls.add(u.origin+"/rest/v1/")}else if(h.includes("digitaloceanspaces.com")||h.includes(".r2.dev")||h.includes("wasabisys.com")||h.includes("linodeobjects.com")||h.includes("vultrobjects.com")){cloudTestUrls.add(u.origin+"/")}}catch(x){}};const addUrl=raw=>{if(!raw||typeof raw!=="string")return;raw=raw.trim();if(!raw||["javascript:","mailto:","tel:","data:","blob:","about:","chrome:"].some(p=>raw.toLowerCase().startsWith(p))||raw==="#"||raw==="/")return;if(raw.toLowerCase().startsWith("s3://")||raw.toLowerCase().startsWith("gs://")){cloudList.add("[Raw Cloud URI] "+raw);registerCloudTests(raw);return}try{const u=new URL(raw,location.href);u.searchParams.forEach((_,k)=>paramNames.add(k));const fp=u.pathname+u.search+u.hash,full=u.href.toLowerCase();if(cloudKw.some(ck=>full.includes(ck))){cloudList.add("[Asset URL] "+u.href);registerCloudTests(u.href)}if(["ws:","wss:"].includes(u.protocol)){wsAndSinks.add("[WebSocket URL] "+u.href);externals.add(u.href);return}if(u.pathname.toLowerCase().endsWith(".map"))sourceMaps.add("[Discovered Map] "+u.href);if(isJsPath(u.pathname)&&(u.origin===origin||u.hostname.endsWith("."+host))){jsFiles.add(u.href);sourceMaps.add("[Candidate .map] "+u.href.split("?")[0]+".map")}if(isIgnored(u.pathname))return;if(u.origin===origin){endpoints.add(fp)}else if(u.hostname===host||u.hostname.endsWith("."+host)){subdomains.add(u.href);endpoints.add(u.href)}else if(["http:","https:"].includes(u.protocol)){externals.add(u.href);if(isFileDb(u.pathname))endpoints.add(u.href)}}catch(x){if((raw.startsWith("/")||raw.startsWith("./")||raw.startsWith("../")||isFileDb(raw))&&!isIgnored(raw))endpoints.add(raw)}};setSt("[1/10] Scanning all DOM elements, attributes, and dataset properties...");const attrs=["href","src","action","formaction","data","cite","poster","background","manifest","profile","usemap","archive","codebase","data-url","data-href","data-src","data-api","data-endpoint","data-route","data-action","data-fetch","data-link","data-target","data-callback","data-redirect","data-ws","data-graphql","data-file","data-download","data-bucket"];document.querySelectorAll("*").forEach(el=>{attrs.forEach(a=>{const v=el.getAttribute(a);if(v)addUrl(v)});if(el.dataset){Object.entries(el.dataset).forEach(([k,v])=>{paramNames.add(k);if(v&&(v.startsWith("/")||v.startsWith("http")||v.startsWith("ws")||v.startsWith("s3://")||v.startsWith("gs://")||v.includes("/api/")||isFileDb(v)))addUrl(v)})}});document.querySelectorAll("meta[content]").forEach(m=>{const n=(m.getAttribute("name")||m.getAttribute("http-equiv")||"").toLowerCase(),c=m.getAttribute("content")||"";if(n.includes("csp")||n.includes("content-security-policy"))headersList.add("[Meta CSP] "+c);if(c.includes("/")||c.includes("http")){const pts=c.split(/url=/i);addUrl(pts[pts.length-1])}});setSt("[2/10] Scanning HTML Comments (<!-- ... -->) for hidden links & backups...");try{const walker=document.createTreeWalker(document,128,null,false);let cNode;while((cNode=walker.nextNode())){const cTxt=(cNode.nodeValue||"").trim();if(cTxt.length>3){const shortC=cTxt.replace(/\s+/g," ").substring(0,220);if(["http","/","api","admin","todo","fixme","bug","dev","test","backup",".zip",".sql",".db",".bak","s3","bucket","firebase","supabase"].some(k=>cTxt.toLowerCase().includes(k))){commentsList.add("<!-- "+shortC+(cTxt.length>220?" ...":"")+" -->")}cTxt.split(/\s+/).forEach(tok=>{const cl=tok.replace(/^['"(<]+/,"").replace(/['")>,;]+$/,"");if(cl.startsWith("http://")||cl.startsWith("https://")||cl.startsWith("s3://")||cl.startsWith("gs://")||cl.startsWith("/")||isFileDb(cl))addUrl(cl)})}}}catch(x){}setSt("[3/10] Extracting Forms, Methods, and Input Parameters...");document.querySelectorAll("form").forEach(f=>{const act=f.getAttribute("action")||location.pathname,mth=(f.getAttribute("method")||"GET").toUpperCase(),inps=[];f.querySelectorAll("input,select,textarea,button").forEach(inp=>{const n=inp.getAttribute("name")||inp.getAttribute("id"),t=inp.getAttribute("type")||inp.tagName.toLowerCase();if(n){paramNames.add(n);inps.push(n+"["+t+"]")}});addUrl(act);formsList.add(mth+" "+act+(inps.length?"  -->  Params: "+inps.join(", "):""))});document.querySelectorAll("input[name],select[name],textarea[name]").forEach(i=>{const n=i.getAttribute("name");if(n)paramNames.add(n)});setSt("[4/10] Reading Browser Network Logs & Framework State (__NEXT_DATA__ / __NUXT__)...");if(window.performance&&performance.getEntriesByType){performance.getEntriesByType("resource").forEach(r=>addUrl(r.name))}try{if(window.__NEXT_DATA__){const nd=window.__NEXT_DATA__;if(nd.page)addUrl(nd.page);if(nd.buildId)discoveryList.add("[Next.js Build ID] "+nd.buildId);if(nd.query)Object.keys(nd.query).forEach(k=>paramNames.add(k))}}catch(x){}const badPrefixes=["//","http://www.w3.org","https://www.w3.org","http://schema.org","https://schema.org","application/","text/","image/","audio/","video/","multipart/","font/"];const validPathRx=/^[a-zA-Z0-9_?&=\/%.\-#~:@+]+$/;const apiStarts=["api/","v1/","v2/","v3/","v4/","v5/","graphql","gql","wp-json/","rest/","oauth/","auth/","admin/","internal/","webhook/","backup/","db/","uploads/","files/","export/","download/"];const sinkPatterns=[{lbl:"postMessage Call",kw:".postMessage("},{lbl:"Message Listener",kw:'addEventListener("message"'},{lbl:"Message Listener",kw:"addEventListener('message'"},{lbl:"WebSocket Init",kw:"new WebSocket("},{lbl:"EventSource (SSE)",kw:"new EventSource("},{lbl:"BroadcastChannel",kw:"new BroadcastChannel("},{lbl:"DOM Sink: innerHTML",kw:".innerHTML="},{lbl:"DOM Sink: outerHTML",kw:".outerHTML="},{lbl:"DOM Sink: document.write",kw:"document.write("},{lbl:"DOM Sink: eval()",kw:"eval("},{lbl:"DOM Sink: location.href",kw:"location.href="},{lbl:"DOM Sink: location.replace",kw:"location.replace("},{lbl:"DOM Sink: window.open",kw:"window.open("},{lbl:"DOM Sink: dangerouslySetInnerHTML",kw:"dangerouslySetInnerHTML"}];const gqlTypes=["query","mutation","subscription"];const analyzeCode=(txt,srcName)=>{if(!txt)return;const strRx=/["'%60]([^"'%60\s<>\\]{2,280})["'%60]/g;let m;while((m=strRx.exec(txt))!==null){const s=m[1].trim(),lowS=s.toLowerCase();if(badPrefixes.some(bp=>lowS.startsWith(bp)))continue;if(lowS.startsWith("s3://")||lowS.startsWith("gs://")){cloudList.add("[Cloud URI in "+srcName.split("/").pop()+"] "+s);registerCloudTests(s);continue}const isRel=s.startsWith("/")||s.startsWith("./")||s.startsWith("../"),isHttp=["http://","https://","ws://","wss://"].some(p=>lowS.startsWith(p)),isApiRel=apiStarts.some(p=>lowS.startsWith(p)),isFile=isFileDb(s),isCld=cloudKw.some(ck=>lowS.includes(ck));if(isCld&&!isHttp&&s.includes(".")){addUrl("https://"+s.replace(/^\/+/,""));continue}if((isRel||isHttp||isApiRel||isFile)&&validPathRx.test(s)){if(isRel&&!/^\/[a-zA-Z0-9_.\-]/.test(s)&&!s.startsWith("./")&&!s.startsWith("../"))continue;if(isFile&&!isRel&&!isHttp){addUrl("/"+s)}else{addUrl(isApiRel?"/"+s:s)}}}gqlTypes.forEach(gt=>{const grx=new RegExp("\\b"+gt+"\\s+([A-Za-z0-9_]{2,64})\\s*[\\(\\{]","g");let gm;while((gm=grx.exec(txt))!==null){const op=gm[1];if(!["function","if","for","while","switch","return","catch"].includes(op))gqlOps.add("["+gt.toUpperCase()+"] "+op+"  (in "+srcName+")")}});const opNameRx=/operationName["']?\s*:\s*["']([A-Za-z0-9_]{2,64})["']/g;let om;while((om=opNameRx.exec(txt))!==null){gqlOps.add("[OPERATION] "+om[1]+"  (in "+srcName+")")}const smRx=/sourceMappingURL=([^\s"'*]+)/g;let smm;while((smm=smRx.exec(txt))!==null){try{const mapUrl=new URL(smm[1],srcName.startsWith("http")?srcName:location.href).href;sourceMaps.add("[Directive Found in "+srcName.split("/").pop()+"] "+mapUrl)}catch(x){}}sinkPatterns.forEach(sp=>{let idx=txt.indexOf(sp.kw),count=0;while(idx!==-1&&count<6){const snip=txt.substring(Math.max(0,idx-20),Math.min(txt.length,idx+90)).replace(/\s+/g," ");wsAndSinks.add("["+sp.lbl+" in "+srcName.split("/").pop()+"]  "+snip);idx=txt.indexOf(sp.kw,idx+sp.kw.length);count++}})};setSt("[5/10] Analyzing Inline <script> blocks for Routes, Cloud URIs, GraphQL, and Sinks...");document.querySelectorAll("script:not([src])").forEach((s,i)=>analyzeCode(s.textContent,"inline-script-"+(i+1)));const safeFetch=async(u,opts={})=>{try{const ctrl=new AbortController(),id=setTimeout(()=>ctrl.abort(),4000);const r=await fetch(u,{...opts,signal:ctrl.signal});clearTimeout(id);return r}catch(x){return null}};setSt("[6/10] Inspecting HTTP Headers, Cloud Backend Signatures & CSP...");const cloudHdrSig=["x-amz-","amazons3","x-goog-","x-guploader","x-ms-","x-azure","cf-r2","x-firebase","x-supabase","x-vercel","x-nf-request"];const headRes=await safeFetch(location.href,{method:"HEAD",cache:"no-store"})||await safeFetch(location.href,{method:"GET"});if(headRes&&headRes.headers){headRes.headers.forEach((val,key)=>{const lk=key.toLowerCase(),lv=val.toLowerCase();headersList.add(key+": "+val);if(cloudHdrSig.some(sig=>lk.includes(sig)||lv.includes(sig))){cloudList.add("[Cloud Header Fingerprint] "+key+": "+val)}if(lk.includes("content-security-policy")){val.split(/[;\s]+/).forEach(tok=>{const t=tok.trim().replace(/^\*\./,"");if(t.includes(".")&&!t.startsWith("'")&&!t.endsWith(":")){const clean=t.startsWith("http")?t:"https://"+t;addUrl(clean)}})}})}setSt("[7/10] Probing Standard Discovery & Main-Directory Cloud Config Files...");const discTargets=[{p:"/robots.txt",t:"txt"},{p:"/sitemap.xml",t:"xml"},{p:"/sitemap_index.xml",t:"xml"},{p:"/.well-known/security.txt",t:"txt"},{p:"/.well-known/openid-configuration",t:"json"},{p:"/.well-known/assetlinks.json",t:"json"},{p:"/.well-known/apple-app-site-association",t:"json"},{p:"/wp-json/",t:"json"},{p:"/swagger.json",t:"json"},{p:"/openapi.json",t:"json"},{p:"/api-docs",t:"json"},{p:"/manifest.json",t:"json"},{p:"/package.json",t:"json"},{p:"/composer.json",t:"json"},{p:"/humans.txt",t:"txt"},{p:"/crossdomain.xml",t:"xml"},{p:"/clientaccesspolicy.xml",t:"xml"},{p:"/.aws/credentials",t:"cred",sig:"[default]"},{p:"/.docker/config.json",t:"cred",sig:"auths"},{p:"/kubeconfig",t:"cred",sig:"apiversion"}];for(const dt of discTargets){const r=await safeFetch(origin+dt.p);if(r&&r.ok){const ct=(r.headers.get("content-type")||"").toLowerCase(),txt=await r.text(),lowTxt=txt.trim().toLowerCase();const isHtml=lowTxt.startsWith("<!doctype")||lowTxt.startsWith("<html");if(!isHtml&&txt.trim().length>0){if(dt.t==="cred"){if(lowTxt.includes(dt.sig)){discoveryList.add("[🔥 EXPOSED CLOUD CREDENTIAL] "+origin+dt.p);cloudList.add("[🔥 EXPOSED CLOUD CREDENTIAL] "+origin+dt.p);endpoints.add(dt.p)}continue}discoveryList.add("[200 OK] "+origin+dt.p+"  ("+ct.split(";")[0]+")");endpoints.add(dt.p);if(dt.p==="/robots.txt"){txt.split("\n").forEach(ln=>{const l=ln.trim(),low=l.toLowerCase();if(["allow:","disallow:","sitemap:"].some(k=>low.startsWith(k))){const p=l.substring(l.indexOf(":")+1).trim();if(p)addUrl(p)}})}else if(dt.t==="xml"){const lrx=/<loc>([^<]+)<\/loc>/gi;let lm;while((lm=lrx.exec(txt))!==null)addUrl(lm[1].trim())}else if(dt.t==="json"){try{const j=JSON.parse(txt);if(j.routes)Object.keys(j.routes).forEach(k=>addUrl("/wp-json"+k));if(j.paths)Object.keys(j.paths).forEach(k=>addUrl(k));Object.values(j).forEach(v=>{if(typeof v==="string"&&(v.startsWith("http")||v.startsWith("/")))addUrl(v)})}catch(x){}}}}}const jsArr=[...jsFiles];for(let i=0;i<jsArr.length;i++){const shortName=jsArr[i].split("/").pop().split("?")[0]||("bundle-"+i);setSt("[8/10] Deep-Scanning JS Bundle ("+(i+1)+"/"+jsArr.length+"): "+shortName);const r=await safeFetch(jsArr[i]);if(r&&r.ok){const code=await r.text();analyzeCode(code,jsArr[i])}}const testArr=[...cloudTestUrls].slice(0,20);for(let i=0;i<testArr.length;i++){const tu=testArr[i];setSt("[9/10] Testing Cloud Root / .json Endpoint ("+(i+1)+"/"+testArr.length+"): "+tu);const r=await safeFetch(tu);if(r){const txt=await r.text(),low=txt.trim().toLowerCase();if(tu.endsWith("/.json")){if(r.ok&&low!=="null"&&!low.includes("permission denied")&&low.startsWith("{")){cloudList.add("[🔥 OPEN FIREBASE .json (200 OK)] "+tu)}else{cloudList.add("[%F0%9F%94%92 LOCKED FIREBASE ("+r.status+")] "+tu)}}else if(low.includes("<listbucketresult")||low.includes("<enumerationresults")||(tu.includes("/v0/b/")&&low.includes('"items"'))){cloudList.add("[🔥 OPEN BUCKET LISTING (200 OK)] "+tu)}else if(r.status===403||low.includes("accessdenied")||low.includes("permission denied")){cloudList.add("[%F0%9F%94%92 LOCKED BUCKET (403 Denied)] "+tu)}else{cloudList.add("[⚡ CLOUD ROOT TEST ("+r.status+")] "+tu)}}else{cloudList.add("[👉 CLICK TO TEST ROOT (CORS Blocked in JS)] "+tu)}}setSt("[10/10] Building Complete 18-Tab Recon & Cloud Dashboard...");const apiKw=["/api/","/v1/","/v2/","/v3/","/v4/","/v5/","/wp-json","/graphql","/gql","/rest/","/ajax","/oauth","/webhook","/rpc","/internal/","/service/",".json",".xml",".php",".asp",".aspx",".jsp",".do",".action",".ashx",".cgi"];const admKw=["admin","login","signin","signup","register","auth","sso","oauth","dashboard","portal","config","setting","user","users","account","profile","debug","test","staging","internal","backup","dump","sql","database","db","upload","import","export","role","permission","billing","invoice","manage","console","swagger","openapi","api-docs","health","metrics","status","env","actuator","phpmyadmin","wp-admin","wp-login","well-known"];const items=[...endpoints].sort().map(path=>{const low=path.toLowerCase(),isParam=path.includes("?")&&path.includes("="),isSsrf=checkSsrfParam(low),isApi=apiKw.some(k=>low.includes(k)),isFile=isFileDb(low),isAdmin=admKw.some(k=>low.includes(k)),isJs=isJsPath(low),isSub=path.startsWith("http");return{path,isParam,isSsrf,isApi,isFile,isAdmin,isJs,isSub}});const subList=[...subdomains].sort(),extList=[...externals].sort(),frmArr=[...formsList].sort(),prmArr=[...paramNames].sort(),gqlArr=[...gqlOps].sort(),mapArr=[...sourceMaps].sort(),wsArr=[...wsAndSinks].sort(),dscArr=[...discoveryList].sort(),hdrArr=[...headersList].sort(),cldArr=[...cloudList].sort(),cmtArr=[...commentsList].sort();let activeTab="all",fullMode=false,vis=[];w.document.head.innerHTML="<title>Pro Recon v6: "+host+" ("+items.length+")</title><style>*{box-sizing:border-box}body{background:#0d1117;color:#c9d1d9;font-family:ui-monospace,Consolas,monospace;margin:0;padding:0}.hdr{position:sticky;top:0;background:#161b22;padding:14px 20px;border-bottom:1px solid #30363d;z-index:10;display:flex;flex-direction:column;gap:10px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{background:#21262d;color:#8b949e;border:1px solid #30363d;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11.5px;font-family:inherit}.tab.act{background:#1f6feb;color:#fff;border-color:#388bfd;font-weight:bold}input{background:#0d1117;color:#fff;border:1px solid #30363d;padding:8px 12px;border-radius:6px;flex:1;min-width:200px;font-family:inherit}.btn{background:#238636;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;font-family:inherit;font-size:12px}.btn.sec{background:#30363d;color:#c9d1d9}.btn:hover{opacity:.9}.list{padding:10px 20px}.item{padding:7px 10px;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:8px;word-break:break-all;font-size:13px}.item:hover{background:#161b22}.item a{color:#58a6ff;text-decoration:none;flex:1}.item a:hover{text-decoration:underline}.bdg{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:bold}.b-api{background:rgba(56,139,253,.15);color:#58a6ff;border:1px solid rgba(56,139,253,.4)}.b-prm{background:rgba(210,153,34,.15);color:#d29922;border:1px solid rgba(210,153,34,.4)}.b-ssrf{background:rgba(219,109,40,.2);color:#ffa657;border:1px solid #ffa657}.b-adm{background:rgba(248,81,73,.15);color:#f85149;border:1px solid rgba(248,81,73,.4)}.b-fil{background:rgba(255,123,114,.2);color:#ff7b72;border:1px solid #ff7b72}.b-js{background:rgba(163,113,247,.15);color:#a371f7;border:1px solid rgba(163,113,247,.4)}.b-sub{background:rgba(63,185,80,.15);color:#3fb950;border:1px solid rgba(63,185,80,.4)}</style>";w.document.body.innerHTML='<div class="hdr"><div class="row"><strong style="color:#fff;font-size:15px">⚡ '+host+'</strong><span style="color:#8b949e;font-size:13px">Showing <b id="cnt" style="color:#58a6ff">0</b></span><input id="q" placeholder="Filter (e.g. OPEN, .json, .zip, s3, supabase, ?url=, admin)..."><button class="btn sec" id="fmt">Mode: Relative</button><button class="btn" id="cp">Copy Visible</button><button class="btn sec" id="dl">Download .txt</button><button class="btn sec" id="dlj">Export Full .json</button></div><div class="tabs"><button class="tab act" data-t="all">All Endpoints ('+items.length+')</button><button class="tab" data-t="fil">Files / DB / Backups ('+items.filter(x=>x.isFile).length+')</button><button class="tab" data-t="api">API / Dynamic ('+items.filter(x=>x.isApi).length+')</button><button class="tab" data-t="prm">With Params ? ('+items.filter(x=>x.isParam).length+')</button><button class="tab" data-t="ssrf">SSRF / Redirect ('+items.filter(x=>x.isSsrf).length+')</button><button class="tab" data-t="adm">Admin / Auth ('+items.filter(x=>x.isAdmin).length+')</button><button class="tab" data-t="cld">Cloud & Buckets ('+cldArr.length+')</button><button class="tab" data-t="gql">GraphQL ('+gqlArr.length+')</button><button class="tab" data-t="map">Source Maps ('+mapArr.length+')</button><button class="tab" data-t="ws">Sinks & WS ('+wsArr.length+')</button><button class="tab" data-t="cmt">HTML Comments ('+cmtArr.length+')</button><button class="tab" data-t="dsc">Discovery ('+dscArr.length+')</button><button class="tab" data-t="hdr">Headers & CSP ('+hdrArr.length+')</button><button class="tab" data-t="js">JS Bundles ('+jsArr.length+')</button><button class="tab" data-t="sub">Subdomains ('+subList.length+')</button><button class="tab" data-t="ext">External ('+extList.length+')</button><button class="tab" data-t="frm">Forms ('+frmArr.length+')</button><button class="tab" data-t="pnm">Param Wordlist ('+prmArr.length+')</button></div></div><div class="list" id="list"></div>';const listEl=w.document.getElementById("list"),cntEl=w.document.getElementById("cnt"),qEl=w.document.getElementById("q"),fmtBtn=w.document.getElementById("fmt"),cpBtn=w.document.getElementById("cp"),dlBtn=w.document.getElementById("dl"),dljBtn=w.document.getElementById("dlj"),tabBtns=[...w.document.querySelectorAll(".tab")],toFull=p=>p.startsWith("http")?p:origin+(p.startsWith("/")?"":"/")+p,esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");const specialTabs={js:jsArr,sub:subList,ext:extList,frm:frmArr,pnm:prmArr,gql:gqlArr,map:mapArr,ws:wsArr,dsc:dscArr,hdr:hdrArr,cld:cldArr,cmt:cmtArr};const render=()=>{const q=qEl.value.toLowerCase();if(specialTabs[activeTab]){const src=specialTabs[activeTab],f=src.filter(x=>x.toLowerCase().includes(q));vis=f;cntEl.textContent=f.length;listEl.innerHTML=f.map(x=>{if(["js","sub","ext"].includes(activeTab))return'<div class="item"><a href="'+esc(x)+'" target="_blank" rel="noopener">'+esc(x)+'</a></div>';if(activeTab==="cld"||activeTab==="map"||activeTab==="dsc"){const uMatch=x.match(/https?:\/\/[^\s]+/);if(uMatch)return'<div class="item"><a href="'+esc(uMatch[0])+'" target="_blank" rel="noopener">'+esc(x)+'</a></div>'}return'<div class="item"><span>'+esc(x)+'</span></div>'}).join("");return}const f=items.filter(it=>{if(activeTab==="fil"&&!it.isFile)return false;if(activeTab==="api"&&!it.isApi)return false;if(activeTab==="prm"&&!it.isParam)return false;if(activeTab==="ssrf"&&!it.isSsrf)return false;if(activeTab==="adm"&&!it.isAdmin)return false;return it.path.toLowerCase().includes(q)});vis=f.map(it=>fullMode?toFull(it.path):it.path);cntEl.textContent=f.length;listEl.innerHTML=f.map(it=>{const disp=fullMode?toFull(it.path):it.path,href=toFull(it.path);let b="";if(it.isFile)b+='<span class="bdg b-fil">FILE/DB/BKP</span>';if(it.isSsrf)b+='<span class="bdg b-ssrf">SSRF/REDIR</span>';if(it.isApi)b+='<span class="bdg b-api">API</span>';if(it.isParam)b+='<span class="bdg b-prm">PARAM</span>';if(it.isAdmin)b+='<span class="bdg b-adm">INTERESTING</span>';if(it.isJs)b+='<span class="bdg b-js">JS</span>';if(it.isSub)b+='<span class="bdg b-sub">SUBDOMAIN</span>';return'<div class="item">'+b+'<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(disp)+'</a></div>'}).join("")};qEl.oninput=render;tabBtns.forEach(btn=>{btn.onclick=()=>{tabBtns.forEach(b=>b.classList.remove("act"));btn.classList.add("act");activeTab=btn.getAttribute("data-t");render()}});fmtBtn.onclick=()=>{fullMode=!fullMode;fmtBtn.textContent=fullMode?"Mode: Full URL":"Mode: Relative";render()};cpBtn.onclick=()=>{w.navigator.clipboard.writeText(vis.join("\n"));cpBtn.textContent="Copied ("+vis.length+")!";setTimeout(()=>cpBtn.textContent="Copy Visible",1500)};dlBtn.onclick=()=>{const b=new Blob([vis.join("\n")],{type:"text/plain"}),a=w.document.createElement("a");a.href=URL.createObjectURL(b);a.download=host+"-"+activeTab+".txt";w.document.body.appendChild(a);a.click();w.document.body.removeChild(a)};dljBtn.onclick=()=>{const rep={host,scannedAt:new Date().toISOString(),summary:{totalEndpoints:items.length,filesDbBackups:items.filter(x=>x.isFile).length,apiEndpoints:items.filter(x=>x.isApi).length,paramEndpoints:items.filter(x=>x.isParam).length,ssrfRedirectCandidates:items.filter(x=>x.isSsrf).length,interestingEndpoints:items.filter(x=>x.isAdmin).length,cloudBucketsAndTests:cldArr.length,graphqlOps:gqlArr.length,sourceMaps:mapArr.length,sinksAndWs:wsArr.length,htmlComments:cmtArr.length,discoveryFiles:dscArr.length,headers:hdrArr.length,jsBundles:jsArr.length,subdomains:subList.length,externalUrls:extList.length,forms:frmArr.length,paramNames:prmArr.length},endpoints:items.map(x=>x.path),filesDbBackups:items.filter(x=>x.isFile).map(x=>x.path),apiEndpoints:items.filter(x=>x.isApi).map(x=>x.path),paramEndpoints:items.filter(x=>x.isParam).map(x=>x.path),ssrfRedirectCandidates:items.filter(x=>x.isSsrf).map(x=>x.path),interestingEndpoints:items.filter(x=>x.isAdmin).map(x=>x.path),cloudBucketsAndTests:cldArr,graphqlOperations:gqlArr,sourceMaps:mapArr,sinksAndWebSockets:wsArr,htmlComments:cmtArr,discoveryHits:dscArr,httpHeadersAndCsp:hdrArr,jsBundles:jsArr,subdomains:subList,externalUrls:extList,forms:frmArr,paramWordlist:prmArr};const b=new Blob([JSON.stringify(rep,null,2)],{type:"application/json"}),a=w.document.createElement("a");a.href=URL.createObjectURL(b);a.download=host+"-complete-recon-v6.json";w.document.body.appendChild(a);a.click();w.document.body.removeChild(a)};render()})();</script>
+
+  <script>
+    const code = document.getElementById('bm-source').textContent.trim();
+    const bmLink = document.getElementById('bmLink');
+    const rawOutput = document.getElementById('rawOutput');
+    const copyBtn = document.getElementById('copyBtn');
+    const charCount = document.getElementById('charCount');
+
+    bmLink.setAttribute('href', code);
+    rawOutput.value = code;
+    charCount.textContent = code.length.toLocaleString() + ' bytes';
+
+    copyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(code);
+      copyBtn.textContent = '✅ Copied to Clipboard!';
+      setTimeout(() => { copyBtn.textContent = '📋 Copy Bookmarklet Payload'; }, 2000);
+    });
+  </script>
+</body>
+</html>
