@@ -8,7 +8,7 @@
 
 Vortex Recon executes directly inside the active browser tab context to extract endpoints, analyze production JavaScript bundles, enumerate GraphQL operations, identify dangerous DOM sinks, and verify cloud storage ACLs (AWS S3, GCP, Azure Blob, Firebase, Supabase, Cloudflare R2) without external CLI dependencies.
 
-🔗 **Live Interactive Installer:** (https://afzal-alf4.github.io/vortex-recon/)
+🔗 **Live Interactive Installer:** https://afzal-alf4.github.io/vortex-recon/
 
 ---
 
