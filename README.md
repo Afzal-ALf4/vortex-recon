@@ -8,7 +8,7 @@
 
 Vortex Recon executes directly inside the active browser tab context to extract endpoints, analyze production JavaScript bundles, enumerate GraphQL operations, identify dangerous DOM sinks, and verify cloud storage ACLs (AWS S3, GCP, Azure Blob, Firebase, Supabase, Cloudflare R2) without external CLI dependencies.
 
-🔗 **Live Interactive Installer:** `https://afzal-alf4.github.io/vortex-recon/`
+🔗 **Live Interactive Installer:** (https://afzal-alf4.github.io/vortex-recon/)
 
 ---
 
@@ -48,7 +48,7 @@ Traditional CLI crawlers (`katana`, `gau`, `waybackurls`) operate outside the au
 
 ### Method 1: Drag-and-Drop (Recommended)
 1. Enable your browser's Bookmarks Bar (`Ctrl+Shift+B` on Windows/Linux or `Cmd+Shift+B` on macOS).
-2. Visit the **[Live Installer Page](https://<YOUR-GITHUB-USERNAME>.github.io/vortex-recon/)** and drag the **⚡ Vortex Recon v6.0** button directly onto your Bookmarks Bar.
+2. Visit the **[Live Installer Page](https://afzal-alf4.github.io/vortex-recon/)** and drag the **⚡ Vortex Recon v6.0** button directly onto your Bookmarks Bar.
 
 ### Method 2: Manual Setup
 1. Copy the raw bookmarklet payload from [`recon.bookmarklet.js`](#raw-bookmarklet-payload) below.
